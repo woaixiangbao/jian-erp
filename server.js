@@ -46,7 +46,7 @@ db.on('open', () => {
   console.log('数据库链接成功');
 });
 
-app.use(users.routes()).use(users.allowMethods());
+app.use(users.routes()).use(users.allowedMethods());
 
 app.listen(8888, () => {
   console.log('链接成功，请打开http://localhost:8888');

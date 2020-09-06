@@ -21,6 +21,11 @@ const routes = [
     name: 'Register',
     component: () => import('../views/users/Register.vue'),
   },
+  {
+    path: '/product',
+    name: 'Product',
+    component: () => import('../views/product/Product.vue'),
+  },
 ];
 
 const router = new VueRouter({
@@ -51,7 +56,7 @@ router.beforeEach((to, from, next) => {
     } else {
       next({
         path: '/login',
-        query: { redirect: to.fullPath }
+        query: { redirect: to.fullPath },
       });
     }
   } else {

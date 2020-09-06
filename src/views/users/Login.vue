@@ -94,7 +94,7 @@ export default {
           });
           setTimeout(() => {
             this.$router.push({
-              path: '/',
+              path: '/product',
             });
           }, 500);
         }

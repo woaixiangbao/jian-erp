@@ -132,22 +132,21 @@ export default {
     sendCode() {
       const { email } = this.ruleForm2;
       if (this.checkEmail(email) && this.ruleForm2.username) {
-        console.log(email);
-
         // 发送验证码
-        axios.userVerify({
+        const sendData = {
           username: encodeURIComponent(this.ruleForm2.username),
           email: this.ruleForm2.email,
-        }).then((res) => {
+        };
+        axios.userVerify(sendData).then((res) => {
           if (res.status === 200 && res.data && res.data.code === 0) {
             this.$notify({
               title: '成功',
               message: '验证码发送成功，请注意查收。有效期5分钟。',
-              duration: 1000,
+              duration: 2000,
               type: 'success',
             });
 
-            let time = 300;
+            let time = 20;
             this.buttonText = '已发送';
             this.isDisabled = true;
             if (this.flag) {

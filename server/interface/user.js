@@ -16,7 +16,7 @@ const Store = new Redis().client;
 router.post('/verify', async (ctx) => {
   const { username } = ctx.request.body;
   const saveExpire = await Store.hget(`nodemail: ${username}`, 'expire'); // 过期时间
-
+  console.log(2222, saveExpire);
   if (saveExpire && new Date().getTime() - saveExpire < 0) {
     // eslint-disable-next-line no-param-reassign
     ctx.body = {
@@ -51,7 +51,7 @@ router.post('/verify', async (ctx) => {
     from: `"认证邮件" <${Email.smtp.user}>`,
     to: ko.email,
     subject: '邀请码',
-    html: `用户${ko.user}, 您正在注册****， 您的邀请码是${ko.code}`,
+    html: `用户${ko.user}, 您正在注册jianqingerp， 您的邀请码是${ko.code}`,
   };
 
   await transporter.sendMail(mailOptions, (err) => {
@@ -128,7 +128,7 @@ router.post('/register', async (ctx) => {
 router.post('/login', async (ctx) => {
   const { username, password } = ctx.request.body;
   const doc = await User.findOne({ username });
-
+  console.log(doc, 444);
   if (!doc) {
     ctx.body = {
       code: -1,
@@ -182,3 +182,7 @@ router.get('/alluser', checkToken, async (ctx) => {
     };
   }
 });
+
+module.exports = {
+  router,
+};
