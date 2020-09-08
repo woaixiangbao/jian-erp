@@ -3,7 +3,7 @@
     <div class="loading-wrapper" v-show="showLoading">
     </div>
     <div class="login-wrapper" v-show="!showLoading">
-      <img :src="imgUrl" alt="" width="100%" height="100%">
+      <!-- <img :src="imgUrl" alt="" width="100%" height="100%"> -->
       <div class="login">
         <p class="title">Vue</p>
         <el-form
@@ -34,6 +34,9 @@
 
 <script>
 import { mapMutations } from 'vuex';
+import CryptoJS from 'crypto-js'; // md5 加密
+// eslint-disable-next-line import/no-cycle
+import axios from '../../axios';
 
 export default {
   name: 'Login',
@@ -84,19 +87,44 @@ export default {
     login(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.bindLogin(this.ruleForm.name);
-          this.saveUser(this.ruleForm.name);
-          this.$notify({
-            title: '成功',
-            message: '恭喜，登录成功。',
-            duration: 1000,
-            type: 'success',
+          const sendData = {
+            username: encodeURIComponent(this.ruleForm.name),
+            password: CryptoJS.MD5(this.ruleForm.pass).toString(),
+          };
+          axios.userLogin(sendData).then((res) => {
+            if (res.status === 200) {
+              console.log(res, 8888);
+              if (res.data && res.data.code === 0) {
+                this.bindLogin(res.data.token);
+                this.saveUser(res.data.username);
+                this.$notify({
+                  title: '成功',
+                  message: '恭喜，登录成功。',
+                  duration: 1000,
+                  type: 'success',
+                });
+                setTimeout(() => {
+                  this.$router.push({
+                    path: '/product',
+                  });
+                }, 500);
+              } else {
+                this.$notify({
+                  title: '错误',
+                  message: res.data.msg,
+                  duration: 1000,
+                  type: 'error',
+                });
+              }
+            } else {
+              this.$notify({
+                title: '错误',
+                message: '服务器出错，请稍后重试',
+                duration: 1000,
+                type: 'error',
+              });
+            }
           });
-          setTimeout(() => {
-            this.$router.push({
-              path: '/product',
-            });
-          }, 500);
         }
       });
     },
@@ -121,6 +149,7 @@ export default {
   justify-content: center;
 }
 .login-wrapper {
+  background: rgba(0, 0, 0, 0.25);
   position: fixed;
   top: 0;
   right: 0;

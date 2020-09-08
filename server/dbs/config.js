@@ -27,7 +27,7 @@ const smtp = {
   },
   // 定义验证码过期时间rules，5分钟内邮箱
   get expire() {
-    return () => new Date().getTime() + 5 * 60 * 1000; // 过期时间是5分钟
+    return () => new Date().getTime() + 1 * 60 * 1000; // 过期时间是1分钟
   },
 };
 

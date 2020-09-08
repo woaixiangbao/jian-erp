@@ -15,8 +15,7 @@ const Store = new Redis().client;
 
 router.post('/verify', async (ctx) => {
   const { username } = ctx.request.body;
-  const saveExpire = await Store.hget(`nodemail: ${username}`, 'expire'); // 过期时间
-  console.log(2222, saveExpire);
+  const saveExpire = await Store.hget(`nodemail:${username}`, 'expire'); // 过期时间
   if (saveExpire && new Date().getTime() - saveExpire < 0) {
     // eslint-disable-next-line no-param-reassign
     ctx.body = {
@@ -46,7 +45,6 @@ router.post('/verify', async (ctx) => {
     email: ctx.request.body.email,
     user: ctx.request.body.username,
   };
-
   const mailOptions = {
     from: `"认证邮件" <${Email.smtp.user}>`,
     to: ko.email,
@@ -58,7 +56,7 @@ router.post('/verify', async (ctx) => {
     if (err) {
       return console.log('发送邮件失败');
     }
-    Store.hmset(`nodemail: ${ko.user}`, 'code', ko.code, 'expire', ko.expire, 'email', ko.email);
+    Store.hmset(`nodemail:${ko.user}`, 'code', ko.code, 'expire', ko.expire, 'email', ko.email);
   });
 
   ctx.body = {
@@ -71,10 +69,10 @@ router.post('/register', async (ctx) => {
   const {
     username, password, email, code,
   } = ctx.request.body;
+  console.log(`注册信息：${ctx.request.body}`);
   if (code) {
     const saveCode = await Store.hget(`nodemail:${username}`, 'code'); // 拿到已存储的真实的验证码
     const saveExpire = await Store.hget(`nodemail:${username}`, 'expire'); // 过期时间
-
     if (code === saveCode) {
       if (new Date().getTime() - saveExpire > 0) {
         ctx.body = {

@@ -2,7 +2,7 @@
   <div>
     <div class="loading-wrapper" v-show="showLoading"></div>
     <div class="register-wrapper" v-show="!showLoading">
-      <img :src="imgUrl" alt="" width="100%" height="100%">
+      <!-- <img :src="imgUrl" alt="" width="100%" height="100%"> -->
       <div id="register">
         <p class="title">Vue</p>
         <el-form
@@ -255,6 +255,7 @@ export default {
   left: 0;
 }
 .register-wrapper {
+  background: rgba(0, 0, 0, 0.35);
   position: fixed;
   top: 0;
   right: 0;
@@ -263,7 +264,7 @@ export default {
 }
 #register {
   max-width: 340px;
-  margin: 60px auto;
+  margin: 10px auto;
   background: #fff;
   padding: 20px 40px;
   border-radius: 10px;
