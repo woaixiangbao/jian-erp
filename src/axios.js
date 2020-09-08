@@ -44,7 +44,6 @@ instance.interceptors.response.use(
           break;
         default:
           console.log('服务器出错，请稍后重试！');
-          // alert('服务器出错，请稍后重试！');
       }
     }
     return Promise.reject(error.response); // 返回接口返回的错误信息
